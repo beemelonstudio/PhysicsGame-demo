@@ -31,7 +31,7 @@ public class JannScreen extends GameScreen {
         super.render(delta);
 
         batch.begin();
-        batch.draw(img, 0, 0);
+        batch.draw(img, 10, 10);
         batch.end();
     }
 
