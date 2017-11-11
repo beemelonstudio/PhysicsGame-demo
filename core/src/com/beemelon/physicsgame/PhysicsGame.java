@@ -50,26 +50,38 @@ public class PhysicsGame extends Game {
 
         screens = new Stack<GameScreen>();
 
-        if(false){
+        if (false) {
             screens.push(new CedricScreen(this));
-        }
-        else {
+        } else {
             screens.push(new JannScreen(this));
             Gdx.app.log("Else", "fhsd");
         }
 
         setScreen(screens.peek());
-	}
+    }
 
-	@Override
-	public void render () {
-	    super.render();
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
 
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-	}
-	
-	@Override
-	public void dispose () {
-	}
+    @Override
+    public void pause() {
+        super.pause();
+    }
+
+    @Override
+    public void resume() {
+        super.resume();
+    }
+
+    @Override
+    public void render() {
+        super.render();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+    }
 }
