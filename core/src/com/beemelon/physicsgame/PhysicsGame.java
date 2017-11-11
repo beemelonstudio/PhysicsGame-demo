@@ -26,9 +26,6 @@ public class PhysicsGame extends Game {
     public static final int W_WIDTH = 432;
     public static final int W_HEIGHT = 768;
 
-    public Preferences preferences;
-    public InputMultiplexer inputMultiplexer;
-
     public SpriteBatch batch;
     public OrthographicCamera camera;
     public Viewport viewport;
@@ -41,36 +38,33 @@ public class PhysicsGame extends Game {
 	@Override
 	public void create () {
 
-		if(true){
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false);
 
-            camera = new OrthographicCamera();
-            camera.setToOrtho(false); //, W_WIDTH, W_HEIGHT);
+        viewport = new ExtendViewport(W_WIDTH, W_HEIGHT, camera);
+        viewport.setScreenY(-viewport.getBottomGutterHeight());
 
-            viewport = new ExtendViewport(W_WIDTH, W_HEIGHT, camera);
-            viewport.setScreenY(-viewport.getBottomGutterHeight());
+        batch = new SpriteBatch();
 
-            batch = new SpriteBatch();
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
 
-            stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
+        screens = new Stack<GameScreen>();
 
-            screens = new Stack<GameScreen>();
+        if(false){
+            screens.push(new CedricScreen(this));
+        }
+        else {
+            screens.push(new JannScreen(this));
+            Gdx.app.log("Else", "fhsd");
+        }
 
-            if(true){
-                screens.push(new CedricScreen(this));
-            }
-            else {
-                screens.push(new JannScreen(this));
-            }
-
-            setScreen(screens.peek());
-		}
-		else {
-
-		}
+        setScreen(screens.peek());
 	}
 
 	@Override
 	public void render () {
+	    super.render();
+
 		Gdx.gl.glClearColor(1, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 	}

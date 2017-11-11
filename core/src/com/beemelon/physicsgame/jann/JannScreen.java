@@ -15,13 +15,15 @@ public class JannScreen extends GameScreen {
 
     public JannScreen(PhysicsGame game) {
         super(game);
-
-        img = new Texture(Gdx.files.internal("badlogic.jpg"));
     }
 
     @Override
     public void show() {
         super.show();
+
+        Gdx.app.log("JannScreen", "Setup");
+
+        img = new Texture(Gdx.files.internal("badlogic.jpg"));
     }
 
     @Override
