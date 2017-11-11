@@ -7,9 +7,9 @@ import com.beemelon.physicsgame.PhysicsGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.title = "PhysicsGame-demo";
-		config.width = 640;
-		config.height = 800;
+		config.title = PhysicsGame.TITLE;
+		config.width = PhysicsGame.V_WIDTH;
+		config.height = PhysicsGame.V_HEIGHT;
 		new LwjglApplication(new PhysicsGame(), config);
 	}
 }
