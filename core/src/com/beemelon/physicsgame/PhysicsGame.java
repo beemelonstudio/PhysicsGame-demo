@@ -20,7 +20,7 @@ import java.util.Stack;
 
 public class PhysicsGame extends Game {
 
-    public static final String TITLE = "FourElements";
+    public static final String TITLE = "PhysicsGame-demo";
     public static final int V_WIDTH = 504;
     public static final int V_HEIGHT = 896;
     public static final int W_WIDTH = 432;
@@ -38,11 +38,11 @@ public class PhysicsGame extends Game {
 	@Override
 	public void create () {
 
-        camera = new OrthographicCamera();
+        camera = new OrthographicCamera(20, 11);
         camera.setToOrtho(false);
 
-        viewport = new ExtendViewport(W_WIDTH, W_HEIGHT, camera);
-        viewport.setScreenY(-viewport.getBottomGutterHeight());
+        //viewport = new ExtendViewport(W_WIDTH, W_HEIGHT, camera);
+        //viewport.setScreenY(-viewport.getBottomGutterHeight());
 
         batch = new SpriteBatch();
 

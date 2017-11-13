@@ -1,7 +1,13 @@
 package com.beemelon.physicsgame.jann;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.screens.GameScreen;
 
@@ -11,7 +17,9 @@ import com.beemelon.physicsgame.screens.GameScreen;
 
 public class JannScreen extends GameScreen {
 
-    private Texture img;
+    private Box2DDebugRenderer debugRenderer;
+
+    public World world;
 
     public JannScreen(PhysicsGame game) {
         super(game);
@@ -21,18 +29,57 @@ public class JannScreen extends GameScreen {
     public void show() {
         super.show();
 
-        Gdx.app.log("JannScreen", "Setup");
+        debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 
-        img = new Texture(Gdx.files.internal("badlogic.jpg"));
+        world = new World(new Vector2(0, -9.81f), true);
+
+        createObject();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
 
+        world.step(delta, 10, 8);
+
+        debugRenderer.render(world, camera.combined);
+
         batch.begin();
-        batch.draw(img, 10, 10);
+
         batch.end();
+    }
+
+    private void createObject(){
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(PhysicsGame.W_WIDTH / 2 - 20, PhysicsGame.W_HEIGHT - 100);
+
+        Body body = world.createBody(bodyDef);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(20);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 0.2f;
+        fixtureDef.restitution = 0.1f;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(PhysicsGame.W_WIDTH / 2 - 20, 100);
+
+        body = world.createBody(bodyDef);
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(100, 20);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        boxShape.dispose();
     }
 
     @Override
