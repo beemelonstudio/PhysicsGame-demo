@@ -50,7 +50,7 @@ public class PhysicsGame extends Game {
 
         screens = new Stack<GameScreen>();
 
-        if (false) {
+        if (true) {
             screens.push(new CedricScreen(this));
         } else {
             screens.push(new JannScreen(this));
