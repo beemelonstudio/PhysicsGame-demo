@@ -46,13 +46,12 @@ public class CedricScreen extends GameScreen {
         bodyDef2.position.set(50, 200);
         body = world.createBody(bodyDef);
         body2 = world.createBody(bodyDef2);
+        body2.setGravityScale(0);
 
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(img.getWidth()/10, img.getHeight()/10);
         PolygonShape shape2 = new PolygonShape();
         shape2.setAsBox(img.getWidth()/10, img.getHeight()/10);
-        EdgeShape edgeShape = new EdgeShape();
-        edgeShape.set(-15,0,15,0);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -61,8 +60,6 @@ public class CedricScreen extends GameScreen {
         FixtureDef fixtureDef2 = new FixtureDef();
         fixtureDef2.shape = shape2;
         Fixture fixture2 = body2.createFixture(fixtureDef2);
-        FixtureDef fistureDef3 = new FixtureDef();
-        fixtureDef.shape = edgeShape;
         shape.dispose();
         shape2.dispose();
 
