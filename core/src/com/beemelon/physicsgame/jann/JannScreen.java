@@ -21,6 +21,8 @@ public class JannScreen extends GameScreen {
 
     public World world;
 
+    private float DEGTORAD = (3.14f/180f);
+
     public JannScreen(PhysicsGame game) {
         super(game);
     }
@@ -51,14 +53,15 @@ public class JannScreen extends GameScreen {
 
     private void createObject(){
 
+        // Kugel
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(PhysicsGame.W_WIDTH / 2 - 20, PhysicsGame.W_HEIGHT - 100);
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, PhysicsGame.HEIGHT * 0.9f);
 
         Body body = world.createBody(bodyDef);
 
         CircleShape shape = new CircleShape();
-        shape.setRadius(20);
+        shape.setRadius(0.05f);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -69,12 +72,55 @@ public class JannScreen extends GameScreen {
 
         shape.dispose();
 
+        // Block oben links
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(PhysicsGame.W_WIDTH / 2 - 20, 100);
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, 1.3f);
 
         body = world.createBody(bodyDef);
         PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(100, 20);
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.2f);
+        body.setTransform(body.getPosition(), 50f * DEGTORAD);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block mitte rechts
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.9f, 0.6f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.2f);
+        body.setTransform(body.getPosition(), -60f * DEGTORAD);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block Boden der Kiste
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, 0.15f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.1f, 0.05f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block linke Kistenwand
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.25f, 0.2f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.1f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block rechte Kistenwand
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.55f, 0.2f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.1f);
 
         fixtureDef.shape = boxShape;
         body.createFixture(fixtureDef);

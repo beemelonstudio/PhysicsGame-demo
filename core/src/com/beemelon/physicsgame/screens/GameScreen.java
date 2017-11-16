@@ -66,8 +66,6 @@ public class GameScreen implements Screen, InputProcessor {
         // Catch Androids native back button
         handleBackButton();
 
-        viewport.apply();
-
         camera.position.set(camera.viewportWidth/2, camera.viewportHeight/2, 0);
 
         camera.update();
@@ -80,7 +78,6 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
 
-        viewport.update(width, height, false);
         stage.getViewport().update(width, height, true);
     }
 
@@ -182,7 +179,7 @@ public class GameScreen implements Screen, InputProcessor {
                 }
             };
 
-            dialog.setBounds( game.W_WIDTH / 10, game.W_HEIGHT / 2, game.W_WIDTH / 10 * 8, game.W_HEIGHT / 10 * 4);
+            dialog.setBounds( camera.viewportWidth / 10, camera.viewportHeight / 2, camera.viewportWidth / 10 * 8, camera.viewportHeight / 10 * 4);
             dialog.text("Are you sure you want to quit?");
             dialog.button("Yes", true);
             dialog.button("No", false);

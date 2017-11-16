@@ -8,8 +8,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.title = PhysicsGame.TITLE;
-		config.width = PhysicsGame.V_WIDTH;
-		config.height = PhysicsGame.V_HEIGHT;
+		config.width = 480;
+		config.height = 800;
 		new LwjglApplication(new PhysicsGame(), config);
 	}
 }
