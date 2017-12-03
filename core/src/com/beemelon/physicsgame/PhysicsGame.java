@@ -7,6 +7,7 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.beemelon.physicsgame.cedric.CedricScreen;
 import com.beemelon.physicsgame.jann.JannScreen;
+import com.beemelon.physicsgame.jann.PlayScreen;
 import com.beemelon.physicsgame.screens.GameScreen;
 
 import java.util.Stack;
@@ -46,8 +48,7 @@ public class PhysicsGame extends Game {
         if (true) {
             screens.push(new CedricScreen(this));
         } else {
-            screens.push(new JannScreen(this));
-            Gdx.app.log("Else", "fhsd");
+            screens.push(new PlayScreen(this)); //JannScreen(this));
         }
 
         setScreen(screens.peek());
@@ -77,7 +78,6 @@ public class PhysicsGame extends Game {
     public void resize(int width, int height) {
         super.resize(width, height);
 
-        Gdx.app.log("Game", "Resized");
         camera.setToOrtho(false, VIRTUAL_HEIGHT * width / (float) height, VIRTUAL_HEIGHT);
         batch.setProjectionMatrix(camera.combined);
     }
