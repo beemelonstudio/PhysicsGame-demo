@@ -1,7 +1,13 @@
 package com.beemelon.physicsgame.jann;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.screens.GameScreen;
 
@@ -11,7 +17,11 @@ import com.beemelon.physicsgame.screens.GameScreen;
 
 public class JannScreen extends GameScreen {
 
-    private Texture img;
+    private Box2DDebugRenderer debugRenderer;
+
+    public World world;
+
+    private float DEGTORAD = (3.14f/180f);
 
     public JannScreen(PhysicsGame game) {
         super(game);
@@ -21,18 +31,101 @@ public class JannScreen extends GameScreen {
     public void show() {
         super.show();
 
-        Gdx.app.log("JannScreen", "Setup");
+        debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 
-        img = new Texture(Gdx.files.internal("badlogic.jpg"));
+        world = new World(new Vector2(0, -9.81f), true);
+
+        createObject();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
 
+        world.step(delta, 10, 8);
+
+        debugRenderer.render(world, camera.combined);
+
         batch.begin();
-        batch.draw(img, 10, 10);
+
         batch.end();
+    }
+
+    private void createObject(){
+
+        // Kugel
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, PhysicsGame.HEIGHT * 0.9f);
+
+        Body body = world.createBody(bodyDef);
+
+        CircleShape shape = new CircleShape();
+        shape.setRadius(0.05f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 0.2f;
+        fixtureDef.restitution = 0.1f;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        // Block oben links
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, 1.3f);
+
+        body = world.createBody(bodyDef);
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.2f);
+        body.setTransform(body.getPosition(), 50f * DEGTORAD);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block mitte rechts
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.9f, 0.6f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.2f);
+        body.setTransform(body.getPosition(), -60f * DEGTORAD);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block Boden der Kiste
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, 0.15f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.1f, 0.05f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block linke Kistenwand
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.25f, 0.2f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.1f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block rechte Kistenwand
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.55f, 0.2f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.1f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        boxShape.dispose();
     }
 
     @Override

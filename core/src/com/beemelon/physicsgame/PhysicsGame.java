@@ -20,11 +20,10 @@ import java.util.Stack;
 
 public class PhysicsGame extends Game {
 
-    public static final String TITLE = "FourElements";
-    public static final int V_WIDTH = 504;
-    public static final int V_HEIGHT = 896;
-    public static final int W_WIDTH = 432;
-    public static final int W_HEIGHT = 768;
+    public static final String TITLE = "PhysicsGame-demo";
+    public static final float WIDTH = 1f;
+    public static final float HEIGHT = 2f;
+    private static final float VIRTUAL_HEIGHT = 2f;
 
     public SpriteBatch batch;
     public OrthographicCamera camera;
@@ -39,13 +38,7 @@ public class PhysicsGame extends Game {
 	public void create () {
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false);
-
-        viewport = new ExtendViewport(W_WIDTH, W_HEIGHT, camera);
-        viewport.setScreenY(-viewport.getBottomGutterHeight());
-
         batch = new SpriteBatch();
-
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
 
         screens = new Stack<GameScreen>();
@@ -83,5 +76,9 @@ public class PhysicsGame extends Game {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+
+        Gdx.app.log("Game", "Resized");
+        camera.setToOrtho(false, VIRTUAL_HEIGHT * width / (float) height, VIRTUAL_HEIGHT);
+        batch.setProjectionMatrix(camera.combined);
     }
 }
