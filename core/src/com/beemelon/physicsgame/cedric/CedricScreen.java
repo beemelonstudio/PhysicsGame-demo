@@ -1,13 +1,13 @@
 package com.beemelon.physicsgame.cedric;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -20,11 +20,14 @@ import com.beemelon.physicsgame.screens.GameScreen;
 
 public class CedricScreen extends GameScreen {
 
-    private Texture img;
+    private Box2DDebugRenderer debugRenderer;
 
-    World world;
-    Body body;
-    Body body2;
+    public World world;
+
+    private float DEGTORAD = (3.14f/180f);
+
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
 
     public CedricScreen(PhysicsGame game) {
         super(game);
@@ -34,54 +37,108 @@ public class CedricScreen extends GameScreen {
     public void show() {
         super.show();
 
-        img = new Texture(Gdx.files.internal("badlogic.jpg"));
+        debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 
-        world = new World(new Vector2(0, -98f), true);
+        world = new World(new Vector2(0, -9.81f), true);
 
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(100, PhysicsGame.W_HEIGHT);
-        BodyDef bodyDef2 = new BodyDef();
-        bodyDef2.type = BodyDef.BodyType.DynamicBody;
-        bodyDef2.position.set(50, 200);
-        body = world.createBody(bodyDef);
-        body2 = world.createBody(bodyDef2);
-        body2.setGravityScale(0);
+        map = new TmxMapLoader().load("maps/test1.tmx");
 
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(img.getWidth()/10, img.getHeight()/10);
-        PolygonShape shape2 = new PolygonShape();
-        shape2.setAsBox(img.getWidth()/10, img.getHeight()/10);
+        renderer = new OrthogonalTiledMapRenderer(map);
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 2f;
-        Fixture fixture = body.createFixture(fixtureDef);
-        FixtureDef fixtureDef2 = new FixtureDef();
-        fixtureDef2.shape = shape2;
-        Fixture fixture2 = body2.createFixture(fixtureDef2);
-        shape.dispose();
-        shape2.dispose();
-
-
+        createObject();
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
 
-        world.step(Gdx.graphics.getDeltaTime(), 6, 2);
+        renderer.render();
+        renderer.setView(camera);
 
-        Gdx.gl.glClearColor(1, 1, 1, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        world.step(delta, 10, 8);
+
+        debugRenderer.render(world, camera.combined);
+
         batch.begin();
-        batch.draw(img, body.getPosition().x, body.getPosition().y);
-        batch.draw(img, body2.getPosition().x, body2.getPosition().y);
+
         batch.end();
+    }
 
+    private void createObject(){
 
+        // Kugel
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, PhysicsGame.HEIGHT * 0.9f);
 
+        Body body = world.createBody(bodyDef);
 
+        CircleShape shape = new CircleShape();
+        shape.setRadius(0.05f);
+
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 1f;
+        fixtureDef.friction = 0.2f;
+        fixtureDef.restitution = 0.1f;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        // Block oben links
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, 1.3f);
+
+        body = world.createBody(bodyDef);
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.2f);
+        body.setTransform(body.getPosition(), 50f * DEGTORAD);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block mitte rechts
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.9f, 0.6f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.2f);
+        body.setTransform(body.getPosition(), -40f * DEGTORAD);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block Boden der Kiste
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.4f, 0.15f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.1f, 0.05f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block linke Kistenwand
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.25f, 0.2f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.1f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        // Block rechte Kistenwand
+        bodyDef.position.set(PhysicsGame.WIDTH * 0.55f, 0.2f);
+
+        body = world.createBody(bodyDef);
+        boxShape = new PolygonShape();
+        boxShape.setAsBox(PhysicsGame.WIDTH * 0.05f, 0.1f);
+
+        fixtureDef.shape = boxShape;
+        body.createFixture(fixtureDef);
+
+        boxShape.dispose();
     }
 
     @Override
