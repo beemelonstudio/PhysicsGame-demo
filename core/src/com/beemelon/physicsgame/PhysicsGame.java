@@ -17,6 +17,7 @@ import com.beemelon.physicsgame.cedric.CedricScreen;
 import com.beemelon.physicsgame.jann.JannScreen;
 import com.beemelon.physicsgame.jann.PlayScreen;
 import com.beemelon.physicsgame.screens.GameScreen;
+import com.beemelon.physicsgame.utils.Assets;
 
 import java.util.Stack;
 
@@ -38,6 +39,7 @@ public class PhysicsGame extends Game {
 	
 	@Override
 	public void create () {
+        Assets.load();
 
         camera = new OrthographicCamera();
         batch = new SpriteBatch();
@@ -71,7 +73,7 @@ public class PhysicsGame extends Game {
 
     @Override
     public void render() {
-        super.render();
+	    super.render();
     }
 
     @Override

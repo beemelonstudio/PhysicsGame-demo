@@ -11,17 +11,11 @@ import com.beemelon.physicsgame.screens.GameScreen;
 
 public class CedricScreen extends GameScreen {
 
-
+    private Texture img;
 
     public CedricScreen(PhysicsGame game) {
         super(game);
     }
-
-    SpriteBatch batch;
-    Sprite sprite;
-    Texture img;
-    World world;
-    Body body;
 
     @Override
     public void show() {
