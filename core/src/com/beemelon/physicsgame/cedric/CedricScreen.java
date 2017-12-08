@@ -41,7 +41,7 @@ public class CedricScreen extends GameScreen {
 
         world = new World(new Vector2(0, -9.81f), true);
 
-        map = new TmxMapLoader().load("maps/test.tmx");
+        map = new TmxMapLoader().load("maps/test1.tmx");
 
         renderer = new OrthogonalTiledMapRenderer(map, 1/500f);
 
