@@ -89,6 +89,9 @@ public class PlayScreen extends GameScreen {
     public void render(float delta) {
         super.render(delta);
 
+        renderer.render();
+        renderer.setView(camera);
+
         if(Gdx.input.isTouched())
             gravity = true;
 
