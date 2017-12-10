@@ -39,7 +39,7 @@ public class CedricScreen extends GameScreen {
 
         debugRenderer = new Box2DDebugRenderer(true,true,true,true,true,true);
 
-        world = new World(new Vector2(0, -9.81f), true);
+        world = new World(new Vector2(0, -9.81f/3f), true);
 
         map = new TmxMapLoader().load("maps/test1.tmx");
 
