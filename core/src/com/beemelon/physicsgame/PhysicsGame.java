@@ -2,20 +2,14 @@ package com.beemelon.physicsgame;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.physics.box2d.Box2D;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.beemelon.physicsgame.cedric.CedricScreen;
-import com.beemelon.physicsgame.jann.JannScreen;
 import com.beemelon.physicsgame.cedric.PlayScreen;
+import com.beemelon.physicsgame.jann.JannScreen;
 import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 
@@ -47,10 +41,10 @@ public class PhysicsGame extends Game {
 
         screens = new Stack<GameScreen>();
 
-        if (true) {
+        if (false) {
             screens.push(new PlayScreen(this));
         } else {
-            screens.push(new PlayScreen(this)); //JannScreen(this));
+            screens.push(new JannScreen(this));
         }
 
         setScreen(screens.peek());
