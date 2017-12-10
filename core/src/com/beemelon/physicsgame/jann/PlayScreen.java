@@ -35,9 +35,7 @@ public class PlayScreen extends GameScreen {
 
     private Ball ball;
     private Goal goal;
-    private ArrayList<Body> lines;
-
-    private float DEGTORAD = (3.14f/180f);
+    private ArrayList<Line> lines;
 
     public PlayScreen(PhysicsGame game) {
         super(game);
@@ -61,19 +59,21 @@ public class PlayScreen extends GameScreen {
         ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
         goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
 
-        lines = new ArrayList<Body>();
+        lines = new ArrayList<Line>();
 
         String easterEgg = "You just found an easter egg!";
 
-        Body body = bodyFactory.createLine(
+        Line line = new Line(
+            bodyFactory.createLine(
                 PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT / 2f,
                 0.2f, 0.01f,
                 -50f,
                 BodyDef.BodyType.StaticBody,
                 LineType.SOLID
+            )
         );
 
-        lines.add(body);
+        lines.add(line);
     }
 
     @Override
@@ -91,6 +91,9 @@ public class PlayScreen extends GameScreen {
         ball.act(delta);
         goal.act(delta);
 
+        for(Line line : lines)
+            line.act(delta);
+
         batch.begin();
 
         // Goal background texture
@@ -98,6 +101,9 @@ public class PlayScreen extends GameScreen {
 
         ball.draw(batch);
         goal.draw(batch);
+
+        for(Line line : lines)
+            line.draw(batch);
 
         batch.end();
     }

@@ -1,6 +1,5 @@
 package com.beemelon.physicsgame.jann;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -11,6 +10,8 @@ import com.beemelon.physicsgame.utils.Assets;
  */
 
 public abstract class Entity implements Actable {
+
+    protected float DEGTORAD = (3.14f/180f);
 
     public String type;
 
