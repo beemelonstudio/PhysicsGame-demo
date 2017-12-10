@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.beemelon.physicsgame.cedric.CedricScreen;
 import com.beemelon.physicsgame.jann.JannScreen;
-import com.beemelon.physicsgame.jann.PlayScreen;
+import com.beemelon.physicsgame.cedric.PlayScreen;
 import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 
