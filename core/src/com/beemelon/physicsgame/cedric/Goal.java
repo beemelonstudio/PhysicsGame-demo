@@ -9,7 +9,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.beemelon.physicsgame.jann.Entity;
+import com.beemelon.physicsgame.cedric.Entity;
 
 /**
  * Created by Jann on 03.12.17.

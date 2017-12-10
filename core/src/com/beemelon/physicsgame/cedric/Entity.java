@@ -3,7 +3,7 @@ package com.beemelon.physicsgame.cedric;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.beemelon.physicsgame.jann.Actable;
+import com.beemelon.physicsgame.cedric.Actable;
 import com.beemelon.physicsgame.utils.Assets;
 
 /**
