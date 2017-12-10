@@ -3,6 +3,9 @@ package com.beemelon.physicsgame.cedric;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -39,6 +42,9 @@ public class PlayScreen extends GameScreen {
 
     private float DEGTORAD = (3.14f/180f);
 
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
+
     public PlayScreen(PhysicsGame game) {
         super(game);
     }
@@ -57,6 +63,9 @@ public class PlayScreen extends GameScreen {
 
         worldManager = new WorldManager();
         bodyFactory = new BodyFactory(worldManager.world);
+
+        map = new TmxMapLoader().load("maps/test1.tmx");
+        renderer = new OrthogonalTiledMapRenderer(map, 1/500f);
 
         ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
         goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
