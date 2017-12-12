@@ -13,7 +13,7 @@ public class CustomContactListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-        
+
     }
 
     @Override

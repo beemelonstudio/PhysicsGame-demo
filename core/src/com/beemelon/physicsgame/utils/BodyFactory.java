@@ -95,6 +95,7 @@ public class BodyFactory {
 
         // Define and create body
         BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
         Body body = world.createBody(bodyDef);
 
