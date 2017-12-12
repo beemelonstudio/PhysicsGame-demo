@@ -3,15 +3,21 @@ package com.beemelon.physicsgame.cedric;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.cedric.Ball;
 import com.beemelon.physicsgame.cedric.Goal;
+import com.beemelon.physicsgame.jann.*;
 import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 import com.beemelon.physicsgame.utils.BodyFactory;
@@ -38,7 +44,7 @@ public class PlayScreen extends GameScreen {
 
     private Ball ball;
     private Goal goal;
-    private ArrayList<Body> lines;
+    private ArrayList<com.beemelon.physicsgame.cedric.Line> lines;
 
     private float DEGTORAD = (3.14f/180f);
 
@@ -70,24 +76,29 @@ public class PlayScreen extends GameScreen {
         ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
         goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
 
-        lines = new ArrayList<Body>();
+        lines = new ArrayList<Line>();
 
         String easterEgg = "You just found an easter egg!";
 
-        Body body = bodyFactory.createLine(
-                PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT / 2f,
-                0.2f, 0.01f,
-                -50f,
-                BodyDef.BodyType.StaticBody,
-                LineType.SOLID
+        Line line = new Line(
+                bodyFactory.createLine(
+                        PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT / 2f,
+                        0.2f, 0.01f,
+                        -50f,
+                        BodyDef.BodyType.StaticBody,
+                        LineType.SOLID
+                )
         );
 
-        lines.add(body);
+        lines.add(line);
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
+
+        renderer.render();
+        renderer.setView(camera);
 
         if(Gdx.input.isTouched())
             gravity = true;
@@ -97,8 +108,37 @@ public class PlayScreen extends GameScreen {
 
         debugRenderer.render(worldManager.world, camera.combined);
 
+        //Collision Objects
+        BodyDef bdef = new BodyDef();
+        PolygonShape shape = new PolygonShape();
+        FixtureDef fdef = new FixtureDef();
+        Body body;
+
+        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
+            body = worldManager.world.createBody(bdef);
+            shape.setAsBox(rect.getWidth()/2, rect.getHeight()/2);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
+
+        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            bdef.type = BodyDef.BodyType.StaticBody;
+            bdef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
+            body = worldManager.world.createBody(bdef);
+            shape.setAsBox(rect.getWidth()/2, rect.getHeight()/2);
+            fdef.shape = shape;
+            body.createFixture(fdef);
+        }
+
         ball.act(delta);
         goal.act(delta);
+
+        for(Line line : lines)
+            line.act(delta);
 
         batch.begin();
 
@@ -107,6 +147,9 @@ public class PlayScreen extends GameScreen {
 
         ball.draw(batch);
         goal.draw(batch);
+
+        for(Line line : lines)
+            line.draw(batch);
 
         batch.end();
     }
