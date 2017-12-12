@@ -11,7 +11,8 @@ import com.beemelon.physicsgame.utils.Assets;
 
 public abstract class Entity implements Actable {
 
-    protected float DEGTORAD = (3.14f/180f);
+    protected float DEGTORAD = (3.1415f/180f);
+    protected float RADTODEG = (180f/3.1415f);
 
     public String type;
 
@@ -29,15 +30,6 @@ public abstract class Entity implements Actable {
 
     public Entity(Body body) {
         this.body = body;
-
-        loadTextureAtlas();
-    }
-
-    public Entity(float x, float y, float width, float height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
 
         loadTextureAtlas();
     }

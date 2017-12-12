@@ -13,8 +13,10 @@ public class WorldManager {
 
     public WorldManager(){
 
-        if(world == null)
-            world = new World(new Vector2(0, -9.81f/3f), true);
+        if(world == null) {
+            world = new World(new Vector2(0, -9.81f / 3f), true);
+
+        }
     }
 
     public WorldManager(World world) {

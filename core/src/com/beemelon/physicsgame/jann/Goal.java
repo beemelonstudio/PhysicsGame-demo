@@ -4,17 +4,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
 /**
  * Created by Jann on 03.12.17.
  */
 
-public class Goal extends Entity implements ContactListener {
+public class Goal extends Entity {
 
     //TODO: Add different layers for rendering
     TextureRegion frontTexture, backTexture;
@@ -32,10 +28,6 @@ public class Goal extends Entity implements ContactListener {
         calculateSizes();
     }
 
-    public Goal(float x, float y, float width, float height) {
-        super(x, y, width, height);
-    }
-
     @Override
     public void act(float delta) {
 
@@ -46,7 +38,7 @@ public class Goal extends Entity implements ContactListener {
     @Override
     public void draw(SpriteBatch batch) {
 
-        batch.draw(frontTexture, x - width / 2, y - height / 2, width, height);
+        //batch.draw(frontTexture, x - width / 2, y - height / 2, width, height);
     }
 
     /**
@@ -70,25 +62,5 @@ public class Goal extends Entity implements ContactListener {
 
         width = Math.abs(leftBody[3].x) + Math.abs(rightBody[0].x);
         height = Math.abs(leftBody[2].y) + Math.abs(leftBody[3].y);
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
     }
 }

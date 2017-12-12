@@ -93,13 +93,17 @@ public class BodyFactory {
 
     public Body createGoal(float x, float y) {
 
-        // Block Boden der Kiste
+        // Define and create body
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(x, y);
-
         Body body = world.createBody(bodyDef);
+
+        // Define and create fixture
         PolygonShape polygonShape = new PolygonShape();
-        //polygonShape.setAsBox(0.05f, 0.1f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+
+        // Left wall
         polygonShape.set(new Vector2[]{
                 new Vector2(-0.04f, 0.07f),
                 new Vector2(-0.04f, -0.1f),
@@ -107,12 +111,9 @@ public class BodyFactory {
                 new Vector2(-0.05f, 0.1f)
         });
 
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = polygonShape;
         body.createFixture(fixtureDef);
 
-        //body = world.createBody(bodyDef);
-        //polygonShape.setAsBox(0.05f, 0.1f);
+        // Right wall
         polygonShape.set(new Vector2[]{
                 new Vector2(0.04f, 0.07f),
                 new Vector2(0.04f, -0.1f),
@@ -120,6 +121,27 @@ public class BodyFactory {
                 new Vector2(0.05f, 0.1f)
         });
 
+        body.createFixture(fixtureDef);
+
+        // Floor
+        polygonShape.set(new Vector2[]{
+                new Vector2(-0.04f, -0.08f),
+                new Vector2(-0.04f, -0.1f),
+                new Vector2(0.04f, -0.1f),
+                new Vector2(0.04f, -0.08f)
+        });
+
+        body.createFixture(fixtureDef);
+
+        // Floor
+        polygonShape.set(new Vector2[]{
+                new Vector2(-0.04f, -0.04f),
+                new Vector2(-0.04f, -0.05f),
+                new Vector2(0.04f, -0.05f),
+                new Vector2(0.04f, -0.04f)
+        });
+
+        fixtureDef.isSensor = true;
         body.createFixture(fixtureDef);
 
         polygonShape.dispose();

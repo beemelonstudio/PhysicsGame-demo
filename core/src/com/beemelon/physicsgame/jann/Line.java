@@ -22,14 +22,6 @@ public class Line extends Entity {
         calculateSizes();
     }
 
-    public Line(float x, float y, float width, float height) {
-        super(x, y, width, height);
-
-        textureRegion = textureAtlas.findRegion("rectangle_long");
-
-        calculateSizes();
-    }
-
     @Override
     public void act(float delta) {
 
@@ -60,7 +52,6 @@ public class Line extends Entity {
         width = Math.abs(vertices[0].x) + Math.abs(vertices[1].x);
         height = Math.abs(vertices[1].y) + Math.abs(vertices[2].y);
 
-        Gdx.app.log("Angel", "" + body.getAngle());
-        rotation = -50f;//body.getAngle() * DEGTORAD;
+        rotation = -(360f - (body.getAngle() * RADTODEG));
     }
 }

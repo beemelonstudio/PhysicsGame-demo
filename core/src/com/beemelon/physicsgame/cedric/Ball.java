@@ -28,10 +28,6 @@ public class Ball extends Entity {
         height = radius * 2;
     }
 
-    public Ball(float x, float y, float width, float height) {
-        super(x, y, width, height);
-    }
-
     @Override
     public void act(float delta) {
 
