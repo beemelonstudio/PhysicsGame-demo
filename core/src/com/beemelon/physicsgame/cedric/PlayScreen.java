@@ -50,6 +50,7 @@ public class PlayScreen extends GameScreen {
 
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private float unitScale = 1/500f;
 
     public PlayScreen(PhysicsGame game) {
         super(game);
@@ -71,7 +72,7 @@ public class PlayScreen extends GameScreen {
         bodyFactory = new BodyFactory(worldManager.world);
 
         map = new TmxMapLoader().load("maps/test1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1/500f);
+        renderer = new OrthogonalTiledMapRenderer(map, unitScale);
 
         ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
         goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
@@ -102,9 +103,9 @@ public class PlayScreen extends GameScreen {
         for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
+            bdef.position.set(rect.getX()/unitScale + rect.getWidth()/unitScale, rect.getY()/unitScale + rect.getHeight()/unitScale);
             body = worldManager.world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2, rect.getHeight()/2);
+            shape.setAsBox(rect.getWidth()/unitScale, rect.getHeight()/unitScale);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
@@ -112,9 +113,9 @@ public class PlayScreen extends GameScreen {
         for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
+            bdef.position.set(rect.getX()/unitScale + rect.getWidth()/unitScale, rect.getY()/unitScale + rect.getHeight()/unitScale);
             body = worldManager.world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2, rect.getHeight()/2);
+            shape.setAsBox(rect.getWidth()/unitScale, rect.getHeight()/unitScale);
             fdef.shape = shape;
             body.createFixture(fdef);
         }
