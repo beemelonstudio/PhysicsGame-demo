@@ -1,6 +1,6 @@
 package com.beemelon.physicsgame.utils;
 
-import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.CircleMapObject;
@@ -29,7 +29,7 @@ public class MapBodyBuilder {
     // The pixels per tile. If your tiles are 16x16, this is set to 16f
     private static float ppt =32f;
 
-    public static Array<Body> buildShapes(Map map, float pixels, World world) {
+    public static Array<Body> buildShapes(TiledMap map, float pixels, World world) {
         ppt = pixels;
         MapObjects objects = map.getLayers().get(3).getObjects();
 

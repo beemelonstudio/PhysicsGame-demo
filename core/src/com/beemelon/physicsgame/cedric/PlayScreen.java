@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.cedric.Ball;
 import com.beemelon.physicsgame.cedric.Goal;
@@ -98,6 +99,7 @@ public class PlayScreen extends GameScreen {
 
         //Collision Objects
        mapBB = new MapBodyBuilder();
+       Array<Body> bodies = MapBodyBuilder.buildShapes(map, 32f, worldManager.world);
     }
 
     @Override
