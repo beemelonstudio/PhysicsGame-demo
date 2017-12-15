@@ -22,6 +22,7 @@ import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 import com.beemelon.physicsgame.utils.BodyFactory;
 import com.beemelon.physicsgame.utils.LineType;
+import com.beemelon.physicsgame.utils.MapBodyBuilder;
 import com.beemelon.physicsgame.utils.WorldManager;
 
 import java.util.ArrayList;
@@ -51,6 +52,7 @@ public class PlayScreen extends GameScreen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private float unitScale = 1/500f;
+    private MapBodyBuilder mapBB;
 
     public PlayScreen(PhysicsGame game) {
         super(game);
@@ -95,30 +97,7 @@ public class PlayScreen extends GameScreen {
 
 
         //Collision Objects
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set(rect.getX()/unitScale + rect.getWidth()/unitScale, rect.getY()/unitScale + rect.getHeight()/unitScale);
-            body = worldManager.world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/unitScale, rect.getHeight()/unitScale);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set(rect.getX()/unitScale + rect.getWidth()/unitScale, rect.getY()/unitScale + rect.getHeight()/unitScale);
-            body = worldManager.world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/unitScale, rect.getHeight()/unitScale);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
+       mapBB = new MapBodyBuilder();
     }
 
     @Override

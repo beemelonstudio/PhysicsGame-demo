@@ -1,4 +1,4 @@
-package com.beemelon.physicsgame.cedric;
+package com.beemelon.physicsgame.utils;
 
 import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.maps.MapObject;
@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.Array;
 public class MapBodyBuilder {
 
     // The pixels per tile. If your tiles are 16x16, this is set to 16f
-    private static float ppt = 0;
+    private static float ppt =32;
 
     public static Array<Body> buildShapes(Map map, float pixels, World world) {
         ppt = pixels;
