@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.cedric.Ball;
 import com.beemelon.physicsgame.cedric.Goal;
@@ -22,6 +23,7 @@ import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 import com.beemelon.physicsgame.utils.BodyFactory;
 import com.beemelon.physicsgame.utils.LineType;
+import com.beemelon.physicsgame.utils.MapBodyBuilder;
 import com.beemelon.physicsgame.utils.WorldManager;
 
 import java.util.ArrayList;
@@ -50,6 +52,8 @@ public class PlayScreen extends GameScreen {
 
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
+    private float unitScale = 1/500f;
+    private MapBodyBuilder mapBB;
 
     public PlayScreen(PhysicsGame game) {
         super(game);
@@ -71,7 +75,7 @@ public class PlayScreen extends GameScreen {
         bodyFactory = new BodyFactory(worldManager.world);
 
         map = new TmxMapLoader().load("maps/test1.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1/500f);
+        renderer = new OrthogonalTiledMapRenderer(map, unitScale);
 
         ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
         goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
@@ -94,30 +98,8 @@ public class PlayScreen extends GameScreen {
 
 
         //Collision Objects
-        BodyDef bdef = new BodyDef();
-        PolygonShape shape = new PolygonShape();
-        FixtureDef fdef = new FixtureDef();
-        Body body;
-
-        for(MapObject object : map.getLayers().get(2).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
-            body = worldManager.world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2, rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
-
-        for(MapObject object : map.getLayers().get(3).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            bdef.position.set(rect.getX() + rect.getWidth()/2, rect.getY() + rect.getHeight()/2);
-            body = worldManager.world.createBody(bdef);
-            shape.setAsBox(rect.getWidth()/2, rect.getHeight()/2);
-            fdef.shape = shape;
-            body.createFixture(fdef);
-        }
+       mapBB = new MapBodyBuilder();
+       Array<Body> bodies = MapBodyBuilder.buildShapes(map, 32f, worldManager.world);
     }
 
     @Override
