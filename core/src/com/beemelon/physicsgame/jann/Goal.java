@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.beemelon.physicsgame.utils.EntityType;
 
 /**
  * Created by Jann on 03.12.17.
@@ -22,10 +23,14 @@ public class Goal extends Entity {
     public Goal(Body body) {
         super(body);
 
+        type = EntityType.GOAL;
+
         frontTexture = textureAtlas.findRegion("goal_3d_front");
         backTexture = textureAtlas.findRegion("goal_3d_back");
 
         calculateSizes();
+
+        body.getFixtureList().get(3).setUserData(type);
     }
 
     @Override
@@ -38,7 +43,7 @@ public class Goal extends Entity {
     @Override
     public void draw(SpriteBatch batch) {
 
-        //batch.draw(frontTexture, x - width / 2, y - height / 2, width, height);
+        batch.draw(frontTexture, x - width / 2, y - height / 2, width, height);
     }
 
     /**

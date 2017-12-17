@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.beemelon.physicsgame.utils.EntityType;
 
 /**
  * Created by Jann on 10.12.17.
@@ -17,9 +18,13 @@ public class Line extends Entity {
     public Line(Body body) {
         super(body);
 
+        type = EntityType.LINE;
+
         textureRegion = textureAtlas.findRegion("rectangle_long");
 
         calculateSizes();
+
+        body.getFixtureList().get(0).setUserData(type);
     }
 
     @Override

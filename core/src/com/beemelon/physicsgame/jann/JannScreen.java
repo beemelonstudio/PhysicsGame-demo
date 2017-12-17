@@ -1,9 +1,11 @@
 package com.beemelon.physicsgame.jann;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -12,6 +14,8 @@ import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 import com.beemelon.physicsgame.utils.BodyFactory;
+import com.beemelon.physicsgame.utils.CustomContactListener;
+import com.beemelon.physicsgame.utils.CustomGestureListener;
 import com.beemelon.physicsgame.utils.LineType;
 import com.beemelon.physicsgame.utils.WorldManager;
 
@@ -54,7 +58,14 @@ public class JannScreen extends GameScreen {
         debugRenderer = new Box2DDebugRenderer(true,true,false,true,true,true);
 
         worldManager = new WorldManager();
+        worldManager.world.setContactListener(new CustomContactListener(this));
+
         bodyFactory = new BodyFactory(worldManager.world);
+
+        Gdx.input.setInputProcessor(new InputMultiplexer(
+                this,
+                new GestureDetector(new CustomGestureListener())
+        ));
 
         ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
         goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
@@ -106,6 +117,11 @@ public class JannScreen extends GameScreen {
             line.draw(batch);
 
         batch.end();
+    }
+
+    public void endLevel() {
+
+        Gdx.app.log("The End", "You did it!");
     }
 
     @Override
