@@ -12,6 +12,8 @@ import com.beemelon.physicsgame.utils.Assets;
 
 public abstract class Entity implements Actable {
 
+    protected float RADTODEG = (180f/3.1415f);
+
     public String type;
 
     protected TextureAtlas textureAtlas;

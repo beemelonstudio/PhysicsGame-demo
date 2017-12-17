@@ -99,14 +99,29 @@ public class PlayScreen extends GameScreen {
 
         //Collision Objects
        mapBB = new MapBodyBuilder();
-       Array<Body> bodies = MapBodyBuilder.buildShapes(map, 32f, worldManager.world);
+       Array<Body> bodies = MapBodyBuilder.buildShapes(map, unitScale, worldManager.world);
+       Gdx.app.log("Bodies", bodies.size + "");
+
+       for(Body body : bodies) {
+           lines.add(new Line(body));
+       }
+
+        line = new Line(
+                bodyFactory.createLine(
+                        PhysicsGame.WIDTH / 2, PhysicsGame.HEIGHT / 2f,
+                        0.2f, 0.01f,
+                        -50f,
+                        BodyDef.BodyType.StaticBody,
+                        LineType.SOLID
+                )
+        );
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
 
-        renderer.render();
+        //renderer.render();
         renderer.setView(camera);
 
         if(Gdx.input.isTouched())
