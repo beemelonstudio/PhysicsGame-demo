@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -27,7 +28,8 @@ public class GameScreen implements Screen, InputProcessor {
     protected Stack<GameScreen> screens;
 
     protected SpriteBatch batch;
-    protected OrthographicCamera camera;
+    protected PolygonSpriteBatch polygonBatch;
+    public OrthographicCamera camera;
     protected Viewport viewport;
 
     protected Stage stage;
@@ -40,6 +42,7 @@ public class GameScreen implements Screen, InputProcessor {
         this.game = game;
         this.screens = game.screens;
         this.batch = game.batch;
+        this.polygonBatch = game.polygonbatch;
         this.camera = game.camera;
         this.viewport = game.viewport;
         this.stage = game.stage;
@@ -71,7 +74,7 @@ public class GameScreen implements Screen, InputProcessor {
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        stage.act();
+        stage.act(delta);
         stage.draw();
     }
 

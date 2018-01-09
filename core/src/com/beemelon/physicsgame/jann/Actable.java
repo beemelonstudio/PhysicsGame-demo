@@ -1,6 +1,5 @@
 package com.beemelon.physicsgame.jann;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**

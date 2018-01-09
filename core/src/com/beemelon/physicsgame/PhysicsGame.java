@@ -3,6 +3,7 @@ package com.beemelon.physicsgame;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -23,7 +24,8 @@ public class PhysicsGame extends Game {
     private static final float VIRTUAL_HEIGHT = 2f;
 
     public SpriteBatch batch;
-    public OrthographicCamera camera;
+    public PolygonSpriteBatch polygonbatch;
+    public OrthographicCamera camera, hudCamera;
     public Viewport viewport;
 
     public Stage stage;
@@ -35,9 +37,13 @@ public class PhysicsGame extends Game {
 	public void create () {
         Assets.load();
 
+        skin = (Skin) Assets.get("pixthulhuSkin");
+
         camera = new OrthographicCamera();
+        hudCamera = new OrthographicCamera();
         batch = new SpriteBatch();
-        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), camera));
+        polygonbatch = new PolygonSpriteBatch();
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), hudCamera));
 
         screens = new Stack<GameScreen>();
 
@@ -75,6 +81,8 @@ public class PhysicsGame extends Game {
         super.resize(width, height);
 
         camera.setToOrtho(false, VIRTUAL_HEIGHT * width / (float) height, VIRTUAL_HEIGHT);
+        hudCamera.setToOrtho(false, width, height);
         batch.setProjectionMatrix(camera.combined);
+        polygonbatch.setProjectionMatrix(camera.combined);
     }
 }

@@ -6,5 +6,5 @@ package com.beemelon.physicsgame.utils;
 
 public enum EntityType {
 
-    BALL, GOAL, LINE
+    BALL, GOAL, STRAIGHTLINE, POLYLINE
 }

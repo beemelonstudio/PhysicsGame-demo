@@ -27,8 +27,8 @@ public class Assets {
         files.put("orange-theme",  new AssetFile("sprites/orange-theme/orange-theme.atlas",     TextureAtlas.class));
 
         //Skins
-        //files.put("defaultSkin",            new AssetFile("skins/default/uiskin.json",          Skin.class));
-        //files.put("pixthulhuSkin",          new AssetFile("skins/pixthulhu/pixthulhu-ui.json",  Skin.class));
+        files.put("defaultSkin",            new AssetFile("skins/default/uiskin.json",          Skin.class));
+        files.put("pixthulhuSkin",          new AssetFile("skins/pixthulhu/pixthulhu-ui.json",  Skin.class));
 
         //I18Ns
         //files.put("defaultI18N",            new AssetFile("i18N/prototype",             I18NBundle.class));

@@ -2,24 +2,18 @@ package com.beemelon.physicsgame.jann;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.input.GestureDetector;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.utils.Array;
 import com.beemelon.physicsgame.PhysicsGame;
 import com.beemelon.physicsgame.screens.GameScreen;
 import com.beemelon.physicsgame.utils.Assets;
 import com.beemelon.physicsgame.utils.BodyFactory;
 import com.beemelon.physicsgame.utils.CustomContactListener;
-import com.beemelon.physicsgame.utils.CustomGestureListener;
-import com.beemelon.physicsgame.utils.LineType;
+import com.beemelon.physicsgame.utils.CustomInputListener;
+import com.beemelon.physicsgame.utils.EntityType;
 import com.beemelon.physicsgame.utils.WorldManager;
-
-import java.util.ArrayList;
 
 /**
  * Created by Jann on 19.11.17.
@@ -29,17 +23,21 @@ public class JannScreen extends GameScreen {
 
     private Box2DDebugRenderer debugRenderer;
 
+    private PlayScreenUI playScreenUI;
+
     private TextureAtlas textureAtlas;
     private TextureRegion ballTexture, goalTexture, lineTexture;
 
     private WorldManager worldManager;
-    private BodyFactory bodyFactory;
 
-    private boolean gravity = false;
+    public boolean gravity = false;
 
-    private Ball ball;
-    private Goal goal;
-    private ArrayList<Line> lines;
+    public EntityType currentType;
+
+    public Ball ball;
+    public Goal goal;
+    public Array<PolyLine> polyLines;
+    public Array<Line> straightLines;
 
     public JannScreen(PhysicsGame game) {
         super(game);
@@ -48,6 +46,8 @@ public class JannScreen extends GameScreen {
     @Override
     public void show() {
         super.show();
+
+        playScreenUI = new PlayScreenUI(this);
 
         textureAtlas = (TextureAtlas) Assets.get("orange-theme");
 
@@ -60,19 +60,25 @@ public class JannScreen extends GameScreen {
         worldManager = new WorldManager();
         worldManager.world.setContactListener(new CustomContactListener(this));
 
-        bodyFactory = new BodyFactory(worldManager.world);
+        BodyFactory.initialize(worldManager.world);
 
+        CustomInputListener customInputListener = new CustomInputListener(this);
         Gdx.input.setInputProcessor(new InputMultiplexer(
-                this,
-                new GestureDetector(new CustomGestureListener())
+                stage,
+                customInputListener.createInputProcesser(),
+                customInputListener.createGestureListener()
         ));
 
-        ball = new Ball(bodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
-        goal = new Goal(bodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
+        currentType = EntityType.STRAIGHTLINE;
 
-        lines = new ArrayList<Line>();
+        ball = new Ball(BodyFactory.createBall(PhysicsGame.WIDTH / 3, PhysicsGame.HEIGHT * 0.9f));
+        goal = new Goal(BodyFactory.createGoal(PhysicsGame.WIDTH - 0.1f, 0.1f));
 
-        String easterEgg = "You just found an easter egg!";
+        polyLines = new Array<PolyLine>();
+        straightLines = new Array<Line>();
+
+        /*
+        polyLines = new ArrayList<Line>();
 
         Line line = new Line(
             bodyFactory.createLine(
@@ -84,15 +90,16 @@ public class JannScreen extends GameScreen {
             )
         );
 
-        lines.add(line);
+        polyLines.add(line);
+        */
     }
 
     @Override
     public void render(float delta) {
         super.render(delta);
 
-        if(Gdx.input.isTouched())
-            gravity = true;
+        // Acting
+        playScreenUI.act(delta);
 
         if(gravity)
             worldManager.world.step(delta, 10, 8);
@@ -102,8 +109,14 @@ public class JannScreen extends GameScreen {
         ball.act(delta);
         goal.act(delta);
 
-        for(Line line : lines)
+        for(PolyLine line : polyLines)
             line.act(delta);
+
+        for(Line line : straightLines)
+            line.act(delta);
+
+        // Drawing
+        playScreenUI.draw(batch);
 
         batch.begin();
 
@@ -113,10 +126,17 @@ public class JannScreen extends GameScreen {
         ball.draw(batch);
         goal.draw(batch);
 
-        for(Line line : lines)
+        for(Line line : straightLines)
             line.draw(batch);
 
         batch.end();
+
+        polygonBatch.begin();
+
+        for(PolyLine line : polyLines)
+            line.draw(polygonBatch);
+
+        polygonBatch.end();
     }
 
     public void endLevel() {

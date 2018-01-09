@@ -4,11 +4,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.FloatArray;
+
+import java.util.ArrayList;
 
 /**
  * Created by Jann on 19.11.17.
@@ -16,15 +19,19 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class BodyFactory {
 
-    private float DEGTORAD = (3.14f/180f);
+    private static float DEGTORAD = (3.14f/180f);
 
-    private World world;
+    private static World world;
 
     public BodyFactory(World world) {
         this.world = world;
     }
 
-    private FixtureDef createFixture(LineType lineType, Shape shape) {
+    public static void initialize(World world) {
+        BodyFactory.world = world;
+    }
+
+    private static FixtureDef createFixture(LineType lineType, Shape shape) {
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -49,7 +56,7 @@ public class BodyFactory {
         return fixtureDef;
     }
 
-    public Body createLine(float x, float y, float width, float height, float rotation, BodyDef.BodyType bodyType, LineType lineType){
+    public static Body createLine(float x, float y, float width, float height, float rotation, BodyDef.BodyType bodyType, LineType lineType){
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = bodyType;
@@ -58,7 +65,7 @@ public class BodyFactory {
         bodyDef.fixedRotation = false;
 
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width, height);
+        shape.setAsBox(width / 2, height / 2);
 
         Body body = world.createBody(bodyDef);
         body.setTransform(body.getPosition(), rotation * DEGTORAD);
@@ -69,7 +76,26 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createBall(float x, float y) {
+    public static Body createPolyLine(float x, float y, float[] vertices, BodyDef.BodyType bodyType, LineType lineType){
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = bodyType;
+        bodyDef.position.x = x;
+        bodyDef.position.y = y;
+
+        PolygonShape shape = new PolygonShape();
+        shape.set(vertices);
+        //shape.set(VectorUtils.libgdxArrayToJavaArray(vertices));
+
+        Body body = world.createBody(bodyDef);
+        body.createFixture(createFixture(lineType, shape));
+
+        shape.dispose();
+
+        return body;
+    }
+
+    public static Body createBall(float x, float y) {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -92,7 +118,7 @@ public class BodyFactory {
         return body;
     }
 
-    public Body createGoal(float x, float y) {
+    public static Body createGoal(float x, float y) {
 
         // Define and create body
         BodyDef bodyDef = new BodyDef();
